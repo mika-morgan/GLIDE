@@ -297,9 +297,10 @@ print("Hello, world!")
     (async () => {
       runtimeStatus.textContent = "Loading Python runtime…";
       try {
-        pyodide = await loadPyodide({ stdout: (t)=>appendOutput(String(t) + "\n") });
-        pyodide.setStdout({ batched: (s)=>appendOutput(s) + "\n"});
-        pyodide.setStderr({ batched: (s)=>appendOutput(s) + "\n"});
+        pyodide = await loadPyodide({
+        stdout: (t) => appendOutput(t + "\n"),
+        stderr: (t) => appendOutput(t + "\n"),
+        });
 
         // input() -> JS prompt
         await pyodide.runPythonAsync(`
@@ -417,6 +418,7 @@ del _glide_input
   </script>
 </body>
 </html>
+
 
 
 
