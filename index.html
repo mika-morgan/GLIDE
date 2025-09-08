@@ -286,9 +286,14 @@ print("Hello, world!")
     let pyReady = false;
 
     function appendOutput(text) {
-      outputEl.textContent += text;
+      if (text == null) return;
+      const s = String(text).replace(/\r\n/g, "\n");
+      // If the chunk doesn't end with a newline, add one.
+      const needsNL = s.length && !s.endsWith("\n");
+      outputEl.textContent += needsNL ? s + "\n" : s;
       outputEl.scrollTop = outputEl.scrollHeight;
-    }
+}
+
     function setOutput(text) {
       outputEl.textContent = text || "";
     }
@@ -418,6 +423,7 @@ del _glide_input
   </script>
 </body>
 </html>
+
 
 
 
