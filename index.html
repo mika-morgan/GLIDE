@@ -76,18 +76,51 @@
       background: #fafafc;
     }
 
-    /* Toolbox styles */
-    .toolbox {
-      padding: 0; display: flex; flex-direction: column;
-    }
-    .toolbox .section {
-      border-bottom: 1px solid var(--border);
-    }
-    .toolbox .section h3 {
-      margin: 0; padding: 10px 12px; font-size: 13px; letter-spacing: .02em; text-transform: uppercase; color: #555;
-      background: #fafbff;
-      border-bottom: 1px solid var(--border);
-    }
+      /* Toolbox styles */
+      .toolbox {
+        padding: 0; display: flex; flex-direction: column;
+      }
+      .toolbox .section {
+        border-bottom: 1px solid var(--border);
+      }
+      /* Collapsible sections */
+  .toolbox .section {
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .toolbox .section > summary {
+    list-style: none;          /* remove default triangle */
+    cursor: pointer;
+    margin: 0;
+    padding: 10px 12px;
+    font-size: 13px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    color: #555;
+    background: #fafbff;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  
+  .toolbox .section > summary::before {
+    content: "▸";              /* caret */
+    transition: transform 0.15s ease;
+    font-size: 12px;
+    color: #777;
+  }
+  
+  .toolbox .section[open] > summary::before {
+    transform: rotate(90deg);
+  }
+  
+  /* Keep the buttons area looking the same */
+  .toolbox .group {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
     .toolbox .group {
       padding: 10px;
       display: grid;
@@ -126,8 +159,8 @@
     <aside class="card toolbox" aria-label="Toolbox">
       <header><div class="title">Toolbox</div></header>
 
-      <div class="section">
-        <h3>Basics</h3>
+      <details class="section" data-key="Basics" open>
+        <summary>Basics</summary>
         <div class="group">
           <button class="snip" data-snippet='print("Hello, world!")\n'>
             print(...)
@@ -142,10 +175,10 @@
             <kbd>Basics</kbd>
           </button>
         </div>
-      </div>
+      </details>
 
-      <div class="section">
-        <h3>Conditionals</h3>
+      <details class="section" data-key="Conditionals" open>
+        <summary>Conditionals</summary>
         <div class="group">
           <button class="snip" data-snippet='x = int(input("Enter a number: "))\nif x > 0:\n    print("positive")\n'>
             if
@@ -160,10 +193,10 @@
             <kbd>Cond</kbd>
           </button>
         </div>
-      </div>
+      </details>
 
-      <div class="section">
-        <h3>Loops</h3>
+      <details class="section" data-key="Loops" open>
+        <summary>Loops</summary>
         <div class="group">
           <button class="snip" data-snippet='for i in range(5):\n    print("i =", i)\n'>
             for range(...)
@@ -178,10 +211,10 @@
             <kbd>Loops</kbd>
           </button>
         </div>
-      </div>
+      </details>
 
-      <div class="section">
-        <h3>Functions</h3>
+      <details class="section" data-key="Functions" open>
+        <summary>Functions</summary>
         <div class="group">
           <button class="snip" data-snippet='def greet(name):\n    print("Hello,", name)\n\ngreet("Glide")\n'>
             def + call
@@ -192,7 +225,7 @@
             <kbd>Func</kbd>
           </button>
         </div>
-      </div>
+      </details>
     </aside>
 
     <!-- Editor -->
@@ -334,6 +367,23 @@ del _glide_input
       });
     }
 
+    // --- Persist toolbox open/closed state ---
+(function persistToolbox() {
+  const KEY = "glide.toolbox.state.v1";
+  let state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch {}
+
+  // Apply saved state on load
+  document.querySelectorAll(".toolbox .section").forEach(sec => {
+    const k = sec.getAttribute("data-key");
+    if (k && typeof state[k] === "boolean") sec.open = state[k];
+    // Save when toggled
+    sec.addEventListener("toggle", () => {
+      state[k] = sec.open;
+      localStorage.setItem(KEY, JSON.stringify(state));
+    });
+  });
+})();
 
     // --- Toolbox insertion ---
     function insertSnippet(snippet) {
@@ -367,5 +417,6 @@ del _glide_input
   </script>
 </body>
 </html>
+
 
 
