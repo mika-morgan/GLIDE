@@ -391,8 +391,10 @@ del _glide_input
   downloadBtn.addEventListener('click', () => {
     let code = editor.getValue();
 
-    // Append footer line
-    code += "\n\n# Written using GLIDE\n";
+    // Append a footer once, with a preceding blank line if needed
+    const footer = '\n\n# Written using GLIDE\n';
+    if (!code.endsWith('\n') && code.length) code += '\n';
+    if (!code.includes('# Written using GLIDE')) code += footer;
 
     const suggested = 'glide_code.py';
     const name = (prompt('File name for download:', suggested) || suggested).trim();
@@ -411,7 +413,6 @@ del _glide_input
     URL.revokeObjectURL(url);
   });
 }
-
 
     // --- Persist toolbox open/closed state ---
 (function persistToolbox() {
@@ -463,6 +464,7 @@ del _glide_input
   </script>
 </body>
 </html>
+
 
 
 
