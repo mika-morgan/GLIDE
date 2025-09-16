@@ -76,62 +76,31 @@
       background: #fafafc;
     }
 
-      /* Toolbox styles */
-      .toolbox {
-        padding: 0; display: flex; flex-direction: column;
-      }
-      .toolbox .section {
-        border-bottom: 1px solid var(--border);
-      }
-      /* Collapsible sections */
-  .toolbox .section {
-    border-bottom: 1px solid var(--border);
-  }
-  
-  .toolbox .section > summary {
-    list-style: none;          /* remove default triangle */
-    cursor: pointer;
-    margin: 0;
-    padding: 10px 12px;
-    font-size: 13px;
-    letter-spacing: .02em;
-    text-transform: uppercase;
-    color: #555;
-    background: #fafbff;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 8px;
-  }
-  
-  .toolbox .section > summary::before {
-    content: "▸";              /* caret */
-    transition: transform 0.15s ease;
-    font-size: 12px;
-    color: #777;
-  }
-  
-  .toolbox .section[open] > summary::before {
-    transform: rotate(90deg);
-  }
-  
-  /* Keep the buttons area looking the same */
-  .toolbox .group {
-    padding: 10px;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
+    /* Toolbox styles */
+    .toolbox {
+      padding: 0; display: flex; flex-direction: column;
+    }
+    .toolbox .section { border-bottom: 1px solid var(--border); }
+    .toolbox .section > summary {
+      list-style: none; cursor: pointer; margin: 0;
+      padding: 10px 12px; font-size: 13px;
+      letter-spacing: .02em; text-transform: uppercase;
+      color: #555; background: #fafbff;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toolbox .section > summary::before {
+      content: "▸"; transition: transform 0.15s ease;
+      font-size: 12px; color: #777;
+    }
+    .toolbox .section[open] > summary::before { transform: rotate(90deg); }
     .toolbox .group {
       padding: 10px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
+      display: grid; grid-template-columns: 1fr; gap: 8px;
     }
     .snip {
-      text-align: left;
-      font-size: 13px;
-      display: inline-flex; align-items: center; justify-content: space-between;
-      gap: 8px;
+      text-align: left; font-size: 13px;
+      display: inline-flex; align-items: center; justify-content: space-between; gap: 8px;
     }
     .snip kbd {
       font-family: var(--mono); font-size: 11px;
@@ -147,6 +116,11 @@
       .wrap { grid-template-columns: 1fr; height: auto; }
       .card { min-height: 45vh; }
     }
+
+    /* Highlight styles */
+    .highlight-loop { background: rgba(100, 149, 237, 0.2); }
+    .highlight-cond { background: rgba(60, 179, 113, 0.2); }
+    .highlight-func { background: rgba(186, 85, 211, 0.2); }
   </style>
 </head>
 <body>
@@ -264,6 +238,7 @@
       </details>
     </aside>
 
+
     <!-- Editor -->
     <section class="card">
       <header>
@@ -272,9 +247,7 @@
           <button id="runBtn" class="primary">Run ▶</button>
           <button id="downloadBtn" title="Download editor code as .py">Download</button>
         </div>
-</header>
-
-
+      </header>
       <div id="editor" class="pane"></div>
       <div class="status" id="editorStatus">Ready</div>
     </section>
@@ -284,10 +257,9 @@
       <header>
         <div class="title">Output</div>
         <div class="toolbar">
-            <button id="clearBtn" title="Clear the output pane">Clear Output</button>
+          <button id="clearBtn" title="Clear the output pane">Clear Output</button>
         </div>
       </header>
-
       <div id="output" class="pane" aria-live="polite"></div>
       <div class="status" id="runtimeStatus">Pyodide not loaded</div>
     </section>
@@ -296,12 +268,8 @@
   <script>
     // --- CodeMirror setup ---
     const editor = CodeMirror(document.getElementById('editor'), {
-      value:
-`#Welcome to Glide, an online Python IDE
-#Try snippets from the left or type your own code, then click 'Run'
-
-print("Hello, world!")
-`,
+      value: `#Welcome to Glide
+print("Hello, world!")\n`,
       mode: "python",
       theme: "neo",
       lineNumbers: true,
@@ -322,53 +290,37 @@ print("Hello, world!")
     let pyReady = false;
 
     function appendOutput(text) {
-      if (text == null) return;
+      if (!text) return;
       const s = String(text).replace(/\r\n/g, "\n");
-      // If the chunk doesn't end with a newline, add one.
-      const needsNL = s.length && !s.endsWith("\n");
-      outputEl.textContent += needsNL ? s + "\n" : s;
+      outputEl.textContent += s.endsWith("\n") ? s : s + "\n";
       outputEl.scrollTop = outputEl.scrollHeight;
-}
-
-    function setOutput(text) {
-      outputEl.textContent = text || "";
     }
+    function setOutput(text) { outputEl.textContent = text || ""; }
 
     // --- Load Pyodide ---
     (async () => {
       runtimeStatus.textContent = "Loading Python runtime…";
       try {
-        pyodide = await loadPyodide({
-        stdout: (t) => appendOutput(t + "\n"),
-        stderr: (t) => appendOutput(t + "\n"),
-        });
-
-        // input() -> JS prompt
+        pyodide = await loadPyodide({ stdout: t => appendOutput(t+"\n"), stderr: t => appendOutput(t+"\n") });
         await pyodide.runPythonAsync(`
 import builtins, js
 def _glide_input(prompt=''):
     v = js.window.prompt(str(prompt), "")
-    if v is None:
-        raise KeyboardInterrupt("Input cancelled")
+    if v is None: raise KeyboardInterrupt("Input cancelled")
     return str(v)
 builtins.input = _glide_input
-del _glide_input
-        `);
-
+del _glide_input`);
         pyReady = true;
         runtimeStatus.textContent = "Python ready";
       } catch (e) {
         runtimeStatus.textContent = "Failed to load Python";
-        appendOutput("Error loading Pyodide:\n" + (e && e.message ? e.message : e));
+        appendOutput("Error loading Pyodide:\n" + (e.message||e));
       }
     })();
 
     // --- Run/Clear ---
     runBtn.addEventListener('click', async () => {
-      if (!pyReady) {
-        appendOutput("Runtime not ready yet.\n");
-        return;
-      }
+      if (!pyReady) { appendOutput("Runtime not ready yet.\n"); return; }
       runBtn.disabled = true;
       editorStatus.textContent = "Running…";
       try {
@@ -377,99 +329,104 @@ del _glide_input
         await pyodide.runPythonAsync(code);
         editorStatus.textContent = "Done";
       } catch (e) {
-        appendOutput((e && e.message ? e.message : String(e)) + "\n");
+        appendOutput((e.message||String(e))+"\n");
         editorStatus.textContent = "Error";
       } finally {
         runBtn.disabled = false;
       }
     });
-
     clearBtn.addEventListener('click', () => setOutput(""));
 
     // --- Download Code ---
-   if (downloadBtn) {
-  downloadBtn.addEventListener('click', () => {
-    let code = editor.getValue();
-
-    // Append a footer once, with a preceding blank line if needed
-    const footer = '\n\n# Written using GLIDE\n';
-    if (!code.endsWith('\n') && code.length) code += '\n';
-    if (!code.includes('# Written using GLIDE')) code += footer;
-
-    const suggested = 'glide_code.py';
-    const name = (prompt('File name for download:', suggested) || suggested).trim();
-    const filename = name.toLowerCase().endsWith('.py') ? name : `${name}.py`;
-
-    const blob = new Blob([code], { type: 'text/x-python;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    URL.revokeObjectURL(url);
-  });
-}
-
-    // --- Persist toolbox open/closed state ---
-(function persistToolbox() {
-  const KEY = "glide.toolbox.state.v1";
-  let state = {};
-  try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch {}
-
-  // Apply saved state on load
-  document.querySelectorAll(".toolbox .section").forEach(sec => {
-    const k = sec.getAttribute("data-key");
-    if (k && typeof state[k] === "boolean") sec.open = state[k];
-    // Save when toggled
-    sec.addEventListener("toggle", () => {
-      state[k] = sec.open;
-      localStorage.setItem(KEY, JSON.stringify(state));
-    });
-  });
-})();
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        let code = editor.getValue();
+        const footer = '\n\n# Written using GLIDE\n';
+        if (!code.endsWith('\n') && code.length) code += '\n';
+        if (!code.includes('# Written using GLIDE')) code += footer;
+        const suggested = 'glide_code.py';
+        const name = (prompt('File name for download:', suggested) || suggested).trim();
+        const filename = name.toLowerCase().endsWith('.py') ? name : `${name}.py`;
+        const blob = new Blob([code], { type: 'text/x-python;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      });
+    }
 
     // --- Toolbox insertion ---
     function insertSnippet(snippet) {
       const doc = editor.getDoc();
       const cursor = doc.getCursor();
-      // Ensure a newline before snippet if cursor is mid-line and preceding text exists
       const lineText = doc.getLine(cursor.line);
-      const needsLeadingNL = lineText.slice(0, cursor.ch).trim().length > 0 ? "\n" : "";
-      doc.replaceRange(needsLeadingNL + snippet, cursor);
-      // Place cursor smartly: if snippet ends with a newline, keep caret after it
-      const endPos = doc.getCursor();
+      const needsNL = lineText.slice(0, cursor.ch).trim().length > 0 ? "\n" : "";
+      doc.replaceRange(needsNL + snippet, cursor);
       editor.focus();
-
-      // Optional: auto-indent the block we just inserted
       const insertedLines = snippet.split("\n").length - 1;
-      const startLine = endPos.line - insertedLines;
-      for (let i = startLine; i <= endPos.line; i++) {
-        editor.indentLine(i, "smart");
-      }
+      const startLine = doc.getCursor().line - insertedLines;
+      for (let i = startLine; i <= doc.getCursor().line; i++) editor.indentLine(i, "smart");
     }
-
     document.querySelectorAll(".snip").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const raw = btn.getAttribute("data-snippet") || "";
-            // Turn the literal \n and \t into actual newline/tab characters
-            const snippet = raw.replace(/\\n/g, "\n").replace(/\\t/g, "\t");
-            insertSnippet(snippet);
-  });
+      btn.addEventListener("click", () => {
+        const raw = btn.getAttribute("data-snippet") || "";
+        insertSnippet(raw.replace(/\\n/g, "\n").replace(/\\t/g, "\t"));
+      });
+    });
+
+   // --- Block highlighting ---
+let lastHighlights = [];
+
+function clearHighlights() {
+  lastHighlights.forEach(({ line, cls }) =>
+    editor.removeLineClass(line, "background", cls)
+  );
+  lastHighlights = [];
+}
+
+function highlightBlock(lineNum, keyword) {
+  clearHighlights();
+  const total = editor.lineCount();
+  const startIndent = editor.getLine(lineNum).match(/^\s*/)[0].length;
+  let endLine = lineNum + 1;
+  while (endLine < total) {
+    const text = editor.getLine(endLine);
+    if (!text.trim()) { endLine++; continue; }
+    const indent = text.match(/^\s*/)[0].length;
+    if (indent <= startIndent) break;
+    endLine++;
+  }
+
+  let cls = "highlight-cond";
+  if (/^(for|while)/.test(keyword)) cls = "highlight-loop";
+  if (/^def/.test(keyword)) cls = "highlight-func";
+
+  for (let i = lineNum; i < endLine; i++) {
+    editor.addLineClass(i, "background", cls);
+    lastHighlights.push({ line: i, cls });
+  }
+}
+
+editor.getWrapperElement().addEventListener("contextmenu", (e) => {
+  const pos = editor.coordsChar({ left: e.clientX, top: e.clientY });
+  const line = editor.getLine(pos.line);
+  const match = line.trim().match(/^(if|elif|else|for|while|def)\b/);
+
+  if (match) {
+    e.preventDefault();
+
+    // If already highlighted, clear instead
+    if (lastHighlights.some(h => h.line === pos.line)) {
+      clearHighlights();
+    } else {
+      highlightBlock(pos.line, match[1]);
+    }
+  } else {
+    // Right-click anywhere else clears
+    clearHighlights();
+  }
 });
 
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
