@@ -179,14 +179,16 @@
           
           <button class="snip"
             data-snippet='name = input("Your name: ")\nprint("Hello,", name)\n'
-            data-tooltip="Get input from the user and store it inside variable 'name'<br>User input is automatically read in as a string">
+            data-tooltip="Get input from the user and store it inside variable 'name'
+            User input is automatically read in as a string">
             input() + print()
             <kbd>Basics</kbd>
           </button>
           
           <button class="snip"
             data-snippet='x = 42\n'
-            data-tooltip="Creates a variable named x and gives it an initial value of 42\nPython automatically determines the most appropriate data type">
+            data-tooltip="Creates a variable named x and gives it an initial value of 42
+            Python automatically determines the most appropriate data type">
             Make a variable
             <kbd>Basics</kbd>
           </button>
@@ -197,15 +199,77 @@
     <details class="section" data-key="Math" open>
       <summary>Math Operations</summary>
       <div class="group">
-        <button class="snip" data-snippet='x = 5 + 3\nprint("Result:", x)\n'>Addition</button>
-        <button class="snip" data-snippet='x = 10 - 4\nprint("Result:", x)\n'>Subtraction</button>
-        <button class="snip" data-snippet='x = 6 * 7\nprint("Result:", x)\n'>Multiplication</button>
-        <button class="snip" data-snippet='x = 20 / 4\nprint("Result:", x)\n'>Division</button>
-        <button class="snip" data-snippet='x = 20 // 3\nprint("Result:", x)\n'>Integer Division</button>
-        <button class="snip" data-snippet='x = 10 % 3\nprint("Result:", x)\n'>Remainder</button>
-        <button class="snip" data-snippet='x = 2 ** 3\nprint("Power:", x)\n'>Exponentiation</button>
-        <button class="snip" data-snippet='x = 1\nx += 1\nprint(x)\n'>Increment</button>
-        <button class="snip" data-snippet='x = 2\nx -= 1\nprint(x)\n'>Decrement</button>
+        <button class="snip" 
+          data-snippet='x = 5 + 3\nprint("Result:", x)\n'
+          data-tooltip="Adds two numbers together
+          Result: 8">
+          Addition
+          <kbd>Math</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='x = 10 - 4\nprint("Result:", x)\n'
+          data-tooltip="Subtracts one number from another
+          Result: 6">
+          Subtraction
+          <kbd>Math</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='x = 6 * 7\nprint("Result:", x)\n'
+          data-tooltip="Multiplies two numbers together
+          Result: 42">
+          Multiplication
+          <kbd>Math</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='x = 20 / 4\nprint("Result:", x)\n'
+          data-tooltip="Divides one number by another
+          Gives the full decimal result">
+          Division
+          <kbd>Math</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='x = 20 // 3\nprint("Result:", x)\n'
+          data-tooltip="Divides one number by another
+          Only gives the whole number portion of the result (truncates)">
+          Integer Division
+          <kbd>Math</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='x = 10 % 3\nprint("Result:", x)\n'
+          data-tooltip="Divides two numbers and returns the remainder
+          Result: 1>
+          Remainder
+          <kbd>Math</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='x = 2 ** 3\nprint("Power:", x)\n'
+          data-tooltip="Raises the first number to the power of the second number
+          Result: 8>
+          Exponentiation
+          <kbd>Math</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='x = 1\nx += 1\nprint(x)\n'
+          data-tooltip="Increases a variable by 1
+          Same as x = x + 1">
+          Increment
+          <kbd>Math</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='x = 2\nx -= 1\nprint(x)\n'
+          data-tooltip="Decreases a variable by 1
+          Same as x = x - 1">
+          Decrement
+          <kbd>Math</kbd>
+        </button>
       </div>
     </details>
 
@@ -472,6 +536,7 @@ editor.getWrapperElement().addEventListener("contextmenu", (e) => {
   </script>
 </body>
 </html>
+
 
 
 
