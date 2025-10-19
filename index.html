@@ -107,6 +107,37 @@
       background: #f1f1f7; border: 1px solid var(--border); border-bottom-color: #d7d7e5;
       padding: 1px 4px; border-radius: 6px; color: #444;
     }
+   
+    /* Custom tooltip styling */
+.snip[data-tooltip] {
+  position: relative;
+}
+
+.snip[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: pre-line; /* THIS allows line breaks */
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease-in-out;
+  width: max-content;
+  max-width: 220px;
+  text-align: center;
+  z-index: 999;
+}
+
+.snip[data-tooltip]:hover::after {
+  opacity: 1;
+}
 
     @media (max-width: 1100px) {
       .wrap { grid-template-columns: 1fr 1fr; }
@@ -123,6 +154,8 @@
     .highlight-func { background: rgba(186, 85, 211, 0.2); }
   </style>
 </head>
+
+  
 <body>
   <header>
     <h1>GLIDE 🧩</h1>
@@ -136,15 +169,23 @@
       <details class="section" data-key="Basics" open>
         <summary>Basics</summary>
         <div class="group">
-          <button class="snip" data-snippet='print("Hello, world!")\n' title='Outputs text to the screen\nUse it to debug or show results'>
+          <button class="snip"
+            data-snippet='print("Hello, world!")\n'
+            data-tooltip="Outputs text to the screen\nUse it to debug or show results">
             print(...)
             <kbd>Basics</kbd>
           </button>
-          <button class="snip" data-snippet='name = input("Your name: ")\nprint("Hello,", name)\n' title='Get input from the user and store it inside variable \'name\'\nUser input is automatically read in a string'>
+          
+          <button class="snip"
+            data-snippet='name = input("Your name: ")\nprint("Hello,", name)\n'
+            data-tooltip="Get input from the user and store it inside variable 'name'\nUser input is automatically read in as a string">
             input() + print()
             <kbd>Basics</kbd>
           </button>
-          <button class="snip" data-snippet='x = 42\n' title='Creates a variable named x and gives it an initial value of 42\nPython automatically determines the most appropriate data type'>
+          
+          <button class="snip"
+            data-snippet='x = 42\n'
+            data-tooltip="Creates a variable named x and gives it an initial value of 42\nPython automatically determines the most appropriate data type">
             Make a variable
             <kbd>Basics</kbd>
           </button>
@@ -430,6 +471,7 @@ editor.getWrapperElement().addEventListener("contextmenu", (e) => {
   </script>
 </body>
 </html>
+
 
 
 
