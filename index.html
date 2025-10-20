@@ -333,15 +333,26 @@
       <details class="section" data-key="Loops" open>
         <summary>Loops</summary>
         <div class="group">
-          <button class="snip" data-snippet='for i in range(5):\n    print("i =", i)\n'>
+          <button class="snip" 
+            data-snippet='for i in range(5):\n    print("i =", i)\n'
+            data-tooltip="Repeats a block of code a set number of times
+            Goes from 0 to given number, non-inclusive">
             for range(...)
             <kbd>Loops</kbd>
           </button>
-          <button class="snip" data-snippet='n = int(input("How many? "))\nwhile n > 0:\n    print(n)\n    n -= 1\n'>
+          
+          <button class="snip" 
+            data-snippet='n = int(input("How many? "))\nwhile n > 0:\n    print(n)\n    n -= 1\n'
+            data-tooltip="Repeats a block of code while a condition remains True
+            Stops when the condition becomes False">
             while
             <kbd>Loops</kbd>
           </button>
-          <button class="snip" data-snippet='items = ["a","b","c"]\nfor item in items:\n    print(item)\n'>
+          
+          <button class="snip" 
+            data-snippet='items = ["a","b","c"]\nfor item in items:\n    print(item)\n'
+            data-tooltip="Loops through each element in a list
+            Use to read or display items, not to modify the list">
             for … in list
             <kbd>Loops</kbd>
           </button>
@@ -352,20 +363,44 @@
     <details class="section" data-key="Lists" open>
       <summary>Lists</summary>
       <div class="group">
-        <button class="snip" data-snippet='my_list = [1, 2, 3]\nprint(my_list)\n'>Make a List</button>
-        <button class="snip" data-snippet='my_list = [1, 2, 3]\nmy_list.append(4)\nprint(my_list)\n'>Add to a List</button>
-        <button class="snip" data-snippet='my_list = [1, 2, 3, 4]\nmy_list.remove(2)\nprint(my_list)\n'>Remove from a List</button>
+        <button class="snip" 
+          data-snippet='my_list = [1, 2, 3]\nprint(my_list)\n'
+          data-tooltip="Creates a list to store multiple values in one container">
+          Make a List
+          <kbd>Lists</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='my_list = [1, 2, 3]\nmy_list.append(4)\nprint(my_list)\n'
+          data-tooltip="Adds a new item to the end of an existing list">
+          Add to a List
+          <kbd>Lists</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='my_list = [1, 2, 3, 4]\nmy_list.remove(2)\nprint(my_list)\n'
+          data-tooltip="Removes the first matching item from a list">
+          Remove from a List
+          <kbd>Lists</kbd>
+        </button>
       </div>
     </details>
 
       <details class="section" data-key="Functions" open>
         <summary>Functions</summary>
         <div class="group">
-          <button class="snip" data-snippet='def greet(name):\n    print("Hello,", name)\n\ngreet("Glide")\n'>
+          <button class="snip" 
+            data-snippet='def greet(name):\n    print("Hello,", name)\n\ngreet("Glide")\n'
+            data-tooltip="Defines a reusable block of code called a function
+            Call it later by name to run the code">
             def + call
             <kbd>Func</kbd>
           </button>
-          <button class="snip" data-snippet='def add(a, b):\n    return a + b\n\nprint(add(2, 3))\n'>
+          
+          <button class="snip" 
+            data-snippet='def add(a, b):\n    return a + b\n\nprint(add(2, 3))\n'
+            data-tooltip="Defines a function that sends a value back using return
+            Return lets you reuse the result in other calculations">
             return value
             <kbd>Func</kbd>
           </button>
@@ -565,6 +600,7 @@ editor.getWrapperElement().addEventListener("contextmenu", (e) => {
   </script>
 </body>
 </html>
+
 
 
 
