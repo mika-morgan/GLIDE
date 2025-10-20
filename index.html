@@ -277,24 +277,53 @@
     <details class="section" data-key="LogicalOps" open>
       <summary>Logical Operators</summary>
       <div class="group">
-        <button class="snip" data-snippet='a = True\nb = False\nprint("Result:", a and b)\n'>and</button>
-        <button class="snip" data-snippet='a = True\nb = False\nprint("Result:", a or b)\n'>or</button>
-        <button class="snip" data-snippet='a = True\nprint("Result:", not a)\n'>not</button>
+        <button class="snip" 
+          data-snippet='a = True\nb = False\nprint("Result:", a and b)\n'
+          data-tooltip="Returns True only if both values are True">
+          and
+          <kbd>Logic</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='a = True\nb = False\nprint("Result:", a or b)\n'
+          data-tooltip="Returns True if at least one value is True">
+          or
+          <kbd>Logic</kbd>
+        </button>
+        
+        <button class="snip" 
+          data-snippet='a = True\nprint("Result:", not a)\n'
+          data-tooltip="Negates the input
+          True becomes False, and False becomes True">
+          not
+          <kbd>Logic</kbd>
+        </button>
       </div>
     </details>
 
       <details class="section" data-key="Conditionals" open>
         <summary>Conditionals</summary>
         <div class="group">
-          <button class="snip" data-snippet='x = int(input("Enter a number: "))\nif x > 0:\n    print("positive")\n'>
+          <button class="snip" 
+            data-snippet='x = int(input("Enter a number: "))\nif x > 0:\n    print("positive")\n'
+            data-tooltip="Runs a block of code only if a condition is True
+            If False, does nothing">
             if
             <kbd>Cond</kbd>
           </button>
-          <button class="snip" data-snippet='x = int(input("Enter a number: "))\nif x % 2 == 0:\n    print("even")\nelse:\n    print("odd")\n'>
+          
+          <button class="snip" 
+            data-snippet='x = int(input("Enter a number: "))\nif x % 2 == 0:\n    print("even")\nelse:\n    print("odd")\n'
+            data-tooltip="Runs a block of code if a condition is True
+            If False, runs else branch">
             if / else
             <kbd>Cond</kbd>
           </button>
-          <button class="snip" data-snippet='score = int(input("Score 0-100: "))\nif score >= 90:\n    print("A")\nelif score >= 80:\n    print("B")\nelif score >= 70:\n    print("C")\nelse:\n    print("Keep going!")\n'>
+          
+          <button class="snip" 
+            data-snippet='score = int(input("Score 0-100: "))\nif score >= 90:\n    print("A")\nelif score >= 80:\n    print("B")\nelif score >= 70:\n    print("C")\nelse:\n    print("Keep going!")\n'
+            data-tooltip="Chains multiple conditions using elif
+            Runs the first block that matches a True condition">
             if / elif / else
             <kbd>Cond</kbd>
           </button>
@@ -536,6 +565,7 @@ editor.getWrapperElement().addEventListener("contextmenu", (e) => {
   </script>
 </body>
 </html>
+
 
 
 
